@@ -4220,33 +4220,33 @@ async function 解析William域名(william) {
     }
 }
 
-// 输入: base64 多行字符串（每行是一个 vless URI）
-// 输出: 处理后再 base64 编码的字符串
+function base64DecodeUtf8(b64) {
+  const binary = atob(b64);
+  const bytes = new Uint8Array([...binary].map(c => c.charCodeAt(0)));
+  return new TextDecoder().decode(bytes);
+}
+function base64EncodeUtf8(str) {
+  const bytes = new TextEncoder().encode(str);
+  let binary = '';
+  for (let b of bytes) binary += String.fromCharCode(b);
+  return btoa(binary);
+}
 function replaceVlessProxyIpPort(inputBase64) {
-  // 解码 base64 为 UTF-8 文本
-  const decoded = Buffer.from(inputBase64, 'base64').toString('utf8');
+  const decoded = base64DecodeUtf8(inputBase64);
   const lines = decoded.split(/\r?\n/);
-
-  const ipPortRegex = /@([^?\/#]+)(?=[\?\/#]|$)/; // 捕获 @ 与 ?/# 或行尾之间的内容
-  const validIpPortRegex = /^(?:\d{1,3}\.){3}\d{1,3}:\d{1,5}$/; // 简单的 ip:port 验证（不严格到每段<=255）
+  const ipPortRegex = /@([^?\/#]+)(?=[\?\/#]|$)/;
+  const validIpPortRegex = /^(?:\d{1,3}\.){3}\d{1,3}:\d{1,5}$/;
   const encodedColon = '%3A';
-
   const outLines = lines.map(line => {
-    if (!line || !line.includes('replaceIpPort')) return line; // 没有 replaceIpPort 则跳过
-
+    if (!line || !line.includes('replaceIpPort')) return line;
     const m = line.match(ipPortRegex);
-    if (!m) return line; // 找不到 @...? 部分则跳过
-
-    const candidate = m[1]; // 例如 "47.83.153.253:443"
-    if (!validIpPortRegex.test(candidate)) return line; // 格式不合则跳过
-
-    // URL-encode the colon as %3A (只替换冒号)
+    if (!m) return line;
+    const candidate = m[1];
+    if (!validIpPortRegex.test(candidate)) return line;
     const encodedIpPort = candidate.replace(':', encodedColon);
-
-    // 将 replaceIpPort 替换为 encodedIpPort（全局）
     return line.replace(/replaceIpPort/g, encodedIpPort);
   });
-
   const result = outLines.join('\n');
-  return Buffer.from(result, 'utf8').toString('base64');
+  return base64EncodeUtf8(result);
 }
+
