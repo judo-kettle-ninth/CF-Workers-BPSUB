@@ -105,20 +105,20 @@ export default {
                 const 伪装域名 = selected.host;
                 const 验证字段名 = trojan ? 'password' : 'uuid';
                 let subConverterUrl = `https://${优选订阅生成器}/sub?${验证字段名}=${uuid}&host=${伪装域名}&path=${encodeURIComponent(最终路径)}`;
-                if (需要订阅转换的UA.some(ua => userAgent.includes(ua)) &&
-                    !userAgent.includes(('CF-Workers-SUB').toLowerCase()) &&
-                    !isSubConverterRequest) {
+                // if (需要订阅转换的UA.some(ua => userAgent.includes(ua)) &&
+                //     !userAgent.includes(('CF-Workers-SUB').toLowerCase()) &&
+                //     !isSubConverterRequest) {
 
-                    responseHeaders["Content-Disposition"] = `attachment; filename*=utf-8''${encodeURIComponent(FileName)}`;
-                    //console.log(subConverterUrl);
-                    if (userAgent.includes('sing-box') || userAgent.includes('singbox')) {
-                        subConverterUrl = `${subProtocol}://${subConverter}/sub?target=singbox&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=${跳过证书验证}&fdn=false&sort=false&new_name=true`;
-                    } else if (userAgent.includes('clash') || userAgent.includes('meta') || userAgent.includes('mihomo')) {
-                        subConverterUrl = `${subProtocol}://${subConverter}/sub?target=clash&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=${跳过证书验证}&fdn=false&sort=false&new_name=true`;
-                    } else {
-                        subConverterUrl = `${subProtocol}://${subConverter}/sub?target=auto&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=${跳过证书验证}&fdn=false&sort=false&new_name=true`;
-                    }
-                }
+                //     responseHeaders["Content-Disposition"] = `attachment; filename*=utf-8''${encodeURIComponent(FileName)}`;
+                //     //console.log(subConverterUrl);
+                //     if (userAgent.includes('sing-box') || userAgent.includes('singbox')) {
+                //         subConverterUrl = `${subProtocol}://${subConverter}/sub?target=singbox&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=${跳过证书验证}&fdn=false&sort=false&new_name=true`;
+                //     } else if (userAgent.includes('clash') || userAgent.includes('meta') || userAgent.includes('mihomo')) {
+                //         subConverterUrl = `${subProtocol}://${subConverter}/sub?target=clash&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=${跳过证书验证}&fdn=false&sort=false&new_name=true`;
+                //     } else {
+                //         subConverterUrl = `${subProtocol}://${subConverter}/sub?target=auto&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=${跳过证书验证}&fdn=false&sort=false&new_name=true`;
+                //     }
+                // }
 
                 try {
                     const subConverterResponse = await fetch(subConverterUrl, { headers: { 'User-Agent': `v2rayN/${FileName} (https://github.com/cmliu/CF-Workers-BPSUB)` } });
